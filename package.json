@@ -1,0 +1,23 @@
+{
+  "name": "notify-lambda",
+  "version": "1.0.0",
+  "description": "Lambda to enable easy personal notification via SMS, email, etc.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node test/test_lambda.js",
+    "zip": "zip -r z_function.zip index.js node_modules src",
+    "upload": "aws lambda update-function-code --function-name notify-lambda --zip-file fileb://z_function.zip",
+    "deploy": "npm run zip && npm run upload",
+    "invoke": "aws lambda invoke --function-name notify-lambda /dev/null --log-type Tail --query 'LogResult' --output text | base64 -d"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kostyan5/notify-lambda.git"
+  },
+  "author": "Konstantin Klitenik",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "dotenv": "^8.2.0"
+  }
+}
