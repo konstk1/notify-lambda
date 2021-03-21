@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "node test/test_lambda.js",
-    "zip": "zip -r z_function.zip index.js node_modules src",
-    "upload": "aws lambda update-function-code --function-name notify-lambda --zip-file fileb://z_function.zip",
-    "deploy": "npm run zip && npm run upload",
+    "build": "webpack && zip -r z_function.zip z_index.js",
+    "upload": "aws lambda update-function-code --function-name notify-lambda --zip-file fileb://z_function.zip --no-cli-pager",
+    "deploy": "npm run build && npm run upload",
     "invoke": "aws lambda invoke --function-name notify-lambda /dev/null --log-type Tail --query 'LogResult' --output text | base64 -d"
   },
   "repository": {
@@ -21,5 +21,9 @@
     "@aws-sdk/client-sns": "^3.9.0",
     "axios": "^0.21.1",
     "dotenv": "^8.2.0"
+  },
+  "devDependencies": {
+    "webpack": "^5.27.1",
+    "webpack-cli": "^4.5.0"
   }
 }

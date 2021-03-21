@@ -8,13 +8,19 @@ async function notifyBySms(message) {
   var params = {
     Message: message,
     PhoneNumber: process.env.NOTIFY_PHONE,
+    MessageAttributes: {
+      'AWS.SNS.SMS.SMSType': {
+        StringValue: 'Transactional',
+        DataType: 'String',
+      }
+    }
   };
 
   const publishCommand = new PublishCommand(params);
 
   try {
     const data = await sns.send(publishCommand);
-    // console.log(data);
+    console.log(data);
   } catch (err) {
     console.log(err);
   }
