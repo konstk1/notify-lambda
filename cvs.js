@@ -1,4 +1,5 @@
 const axios = require('axios');
+const { exec } = require('child_process')
 
 const options = {
   url: "https://www.cvs.com/Services/ICEAGPV1/immunization/1.0.0/getEligibilityQuestions",
@@ -30,7 +31,7 @@ const currentEligibilityOptions = [
   'Teachers K-12, Daycare and preschool workers, and staff members',
   'Age 16+ with 2+ select medical conditions that increase the risk of severe illness from COVID-19',
   'Qualifying healthcare worker or first responder',
-  // 'Resident or staff of long-term care, congregate care, and low income and affordable senior housing',
+  'Resident or staff of long-term care, congregate care, and low income and affordable senior housing',
   'None of the above'
 ];
 
@@ -43,10 +44,14 @@ async function checkEligibilityQs() {
 
   for (option of eligibilityOptions) {
     if (currentEligibilityOptions.indexOf(option) < 0) {
-      // console.log('Found new option: ', option);
+      console.log('eligibilityOptions :>> ', eligibilityOptions);
+      console.log('Found new option: ', option);
+      exec('afplay /System/Library/Sounds/Funk.aiff');
       return option;
     }
   }
+
+  console.log('CVS: Nothing new');
 
   return undefined;
 }
