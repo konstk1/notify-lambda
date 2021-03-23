@@ -1,4 +1,4 @@
-const { SNSClient, PublishCommand } = require("@aws-sdk/client-sns");
+const { SNSClient, PublishCommand } = require('@aws-sdk/client-sns');
 
 const sns = new SNSClient({ region: 'us-east-1' });
 
@@ -18,9 +18,10 @@ async function notify(phoneNumber, message) {
 
   try {
     const data = await sns.send(publishCommand);
-    console.log(data);
+    console.log('SMS sending status: ', data.$metadata.httpStatusCode);
+    return data.$metadata.httpStatusCode;
   } catch (err) {
-    console.log(err);
+    console.log('SMS failed: ', err);
   }
 }
 

@@ -37,6 +37,7 @@ const currentEligibilityOptions = [
 
 async function checkEligibilityQs() {
   const response = await axios(options);
+  console.log(response);
   const answerOptions = response.data.responsePayloadData.eligibilityQuestions[1].answerOptions[0].answerOptions;
   const eligibilityOptions = answerOptions.map(a => a.question);
 

@@ -1,41 +1,40 @@
-const { SESClient, SendEmailCommand } = require("@aws-sdk/client-ses");
+const { SESClient, SendEmailCommand } = require('@aws-sdk/client-ses');
 
 
 const ses = new SESClient({ region: 'us-east-1' });
 
-async function notify(email, subject, body) {
+const defaultSubject = 'Lambda Notification';
+
+async function notify(email, subject = 'Lambda Notification', body) {
   // Set the parameters
   const params = {
+    Source: process.env.NOTIFY_EMAIL_FROM,
     Destination: {
-      /* required */
-      // CcAddresses: [
-      //   /* more items */
-      // ],
       ToAddresses: [
         email,
       ],
     },
     Message: {
       Body: {
-        /* required */
         Text: {
-          Charset: "UTF-8",
+          Charset: 'UTF-8',
           Data: body,
         },
       },
       Subject: {
-        Charset: "UTF-8",
+        Charset: 'UTF-8',
         Data: subject,
       },
     },
-    Source: process.env.NOTIFY_EMAIL_FROM,
   };
 
   try {
     const data = await ses.send(new SendEmailCommand(params));
-    console.log("Success", data);
+    console.log('Email sending status: ', data.$metadata.httpStatusCode);
+    return data.$metadata.httpStatusCode;
   } catch (err) {
-    console.log("Error", err);
+    console.log('Email failed: ', err);
+    return err.$metadata.httpStatusCode;
   }
 };
 
